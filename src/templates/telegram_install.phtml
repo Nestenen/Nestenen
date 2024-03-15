@@ -1,0 +1,44 @@
+	
+	<!DOCTYPE html>
+	<html lang="en" ng-app="app">
+		<head>
+			<!-- Required meta tags -->
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+			<!-- Common CSS -->
+			<link rel="stylesheet" type="text/css" href="../src/css/main.css">
+			<link rel="stylesheet" type="text/css" href="../src/css/common.css">
+			<!-- Bootstrap CSS -->
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+            <script type="text/javascript" src="../src/js/jquery-3.5.1.js"></script>
+            <script src="../src/js/bootstrap.min.js"></script>
+
+			<title><?php echo($params['title']); ?></title>
+            
+		</head>
+		
+		<body>
+				
+			<div class="container-fluid" style="width: 95%; height: auto; min-height: 900px; border: 2px dotted blue; text-align: center;">
+
+				<h3>Модуль установки</h3>
+
+				<div class="container" style="width: 100%;">
+				</div>
+
+				<head>
+				<script src="//api.bitrix24.com/api/v1/"></script>
+					<script>
+						BX24.init(function(){
+							BX24.installFinish();
+						});
+					</script>
+				</head>
+				
+				<body></body>
+				
+			</div>
+            
+		</body>
+    
+    </html>

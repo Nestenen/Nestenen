@@ -1,0 +1,100 @@
+                .table_class {border: 1px dotted black; width: 100%;}
+                .table_choise_class {border: 0px; width: 100%;}
+                .table_button_class {border: 0px; width: 100%;}
+                .tr_class {border: 1px dotted black;}
+                .td_class {border: 1px dotted black; text-align: center;}
+                span.choise{font-color: blue; color: blue; border-bottom: 1px dashed blue; cursor: pointer;}
+                span.choise_block{font-color: gray; color: gray; border-bottom: 1px dashed gray; cursor: pointer;}
+                span.mode{font-color: #E10C55; color: #E10C55; border-bottom: 1px dotted #E10C55; cursor: pointer;} /* #E10C55 */
+                
+                .unselectable {
+                    -webkit-touch-callout: none; /* iOS Safari */
+                    -webkit-user-select: none;   /* Chrome/Safari/Opera */
+                    -khtml-user-select: none;    /* Konqueror */
+                    -moz-user-select: none;      /* Firefox */
+                    -ms-user-select: none;       /* Internet Explorer/Edge */
+                    user-select: none;           /* Non-prefixed version, currently not supported by any browser */
+                }
+                
+                .scroll-table-body {
+                    height: 250px;
+                    overflow-x: auto;
+                    margin-top: 0px;
+                    margin-bottom: 20px;
+                    border-top: 1px dotted black;
+                    border-bottom: 0px dotted black;
+                }
+                .scroll-table table {
+                    table-layout: fixed;
+                    border-top: 0px dotted black;
+                    border-bottom: 0px dotted red;
+                    border-left: 1px dotted black;
+                    border-right: 1px dotted black;
+                }
+                .scroll-table thead th {
+                    font-weight: bold;
+                    text-align: center;
+                    padding: 10px 15px;
+                    background: #FFFFFF;
+                    font-size: 13px;
+                    border-top: 1px dotted black;
+                    border-left: 1px dotter black;
+                    border-right: 1px dotter black;
+                    border-bottom: 0px dotted red;
+                }
+                .scroll-table tbody td {
+                    text-align: center;
+                    border-top: 0px dotted green;
+                    border-left: 1px dotter black;
+                    border-right: 1px dotter black;
+                    padding: 10px 15px;
+                    font-size: 13px;
+                    vertical-align: middle;
+                }
+                .scroll-table tbody tr:nth-child(even){
+                    background: #FFFFFF;
+                }
+                 
+                /* Стили для скролла */
+                ::-webkit-scrollbar {
+                    width: 6px;
+                }
+                ::-webkit-scrollbar-track {
+                    box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+                } 
+                ::-webkit-scrollbar-thumb {
+                    box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+                }
+				
+				.custom-checkbox {
+					position: absolute;
+					z-index: -1;
+					opacity: 0;
+				}
+				.custom-checkbox+label {
+					display: inline-flex;
+					align-items: center;
+					user-select: none;
+					font-size: 14pt;
+					font-color: black;
+				}
+				.custom-checkbox+label::before {
+					content: '';
+					display: inline-block;
+					width: 1em;
+					height: 1em;
+					flex-shrink: 0;
+					flex-grow: 0;
+					border: 1px solid #adb5bd;
+					border-radius: 0.25em;
+					margin-right: 0.5em;
+					background-repeat: no-repeat;
+					background-position: center center;
+					background-size: 50% 50%;
+				}
+
+				.custom-checkbox:checked+label::before {
+					border-color: #0b76ef;
+					background-color: #0b76ef;
+					background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3e%3c/svg%3e");
+				}

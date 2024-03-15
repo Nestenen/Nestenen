@@ -1,0 +1,239 @@
+	
+	<!DOCTYPE html>
+	<html lang="en" ng-app="app">
+		<head>
+			<!-- Required meta tags -->
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+			<!-- Common CSS -->
+			<link rel="stylesheet" type="text/css" href="src/css/main.css">
+			<link rel="stylesheet" type="text/css" href="src/css/common.css">
+			<!-- Bootstrap CSS -->
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+            <script type="text/javascript" src="src/js/jquery-3.5.1.js"></script>
+            <script src="src/js/bootstrap.min.js"></script>
+			
+			<script src="https://api.bitrix24.com/api/v1/"></script>
+			<!--<script type="text/javascript" src="src/js/bx24-wrapper.js"></script>-->
+
+			<title><?php echo('Настоящее приложение'); ?></title>
+            
+		</head>
+		
+        <body>
+            
+            <div class="container-fluid" style="width: 95%; height: auto; min-height: 900px; border: 2px dotted blue; text-align: center;">
+            
+            <h3 style="margin-top: 25px;"><?php print_r($params['title']) ?></h3>
+                
+                <div class="container" style="width: 100%; padding: 0 25% 0 25%;">
+				
+					<br><br>
+                    
+                    <p><button class="btn btn-primary" id="db_button">Сделать запрос</button></p>
+                    
+                    <table id="db_table" class="table_class">
+                        <thead class="table_border">
+                            <th class="td_class" style="width: 200px;">id</th>
+                            <th class="td_class" style="width: 200px;">chat_id</th>
+                            <th class="td_class" style="width: 200px;">user_id</th>
+                            <th class="td_class" style="width: 200px;">first_name</th>
+                            <th class="td_class" style="width: 200px;">username</th>
+                            <th class="td_class" style="width: 200px;">associated_user</th>
+                        </thead>
+                        <tbody id="db_table_tbody"></tbody>
+                    </table>
+                    
+                    <p><button class="btn btn-primary" id="replace_send_button">Отправить данные</button></p>
+
+                </div>
+                
+                <script>
+				
+					BX24.init(app);
+                    
+                    function app() {
+						const initDate = BX24.getAuth();
+					}
+                    
+                    let params = {
+                        'CODE': 'tg_2',
+                        'HANDLER': 'telegramm.php',
+                        'USE_SUBSCRIPTION': 'N',
+                        'NAME': {
+                            'ru': 'Отправка сообщений группе телеграмм',
+                        },
+                        'DESCRIPTION': {
+                                'ru': 'Отправляет сообщение группе Телеграмм по прикреплённому id',
+                        },
+                        'PROPERTIES': {
+                            'inputString': {
+                                'Name': {
+                                    'ru': 'Текст сообщения',
+                                },
+                                'Description': {
+                                    'ru': 'Введите, что хотите отправить группе',
+                                },
+                                'Type': 'string',
+                                'Required': 'Y',
+                                'Multiple': 'N',
+                                'Default': ''
+                            },
+                            'inputUser': {
+                                'Name': {
+                                    'ru': 'Введите id группы',
+                                },
+                                'Description': {
+                                    'ru': 'Введите, какой закреплённой группе вы хотите отправить сообщение',
+                                },
+                                'Type': 'string',
+                                'Required': 'Y',
+                                'Multiple': 'N',
+                                'Default': ''
+                            }
+                        },
+                    };
+
+                    BX24.callMethod(
+                    'bizproc.activity.add',
+                    params,
+                    function(result)
+                    {
+                    if(result.error())
+                    alert("Error: " + result.error());
+                    else
+                    alert("Success: " + result.data());
+                    }
+                    );
+                        
+                    let replace_send_button = document.getElementById('replace_send_button');
+                    let db_table = document.getElementById('db_table');
+                        db_table.setAttribute('hidden', '');
+                    let db_table_tbody = document.getElementById('db_table_tbody');
+					let methode_button = document.getElementById('db_button');
+                    let associated_user_id = 'associated_user_id';
+                    let replace_id = '';
+                    let td_id = 'td_id';
+
+					methode_button.addEventListener('click', function () {
+                        
+                        clear_table = document.getElementById("db_table_tbody");
+                        clear_table.innerHTML = '';
+                        db_table.removeAttribute('hidden');
+                        console.log('result: ');
+                        let number;
+
+						$.get("database", function(data){
+                            
+                            let data_json = JSON.parse(data);
+                           
+                            console.log(data_json); 
+                            
+                            number = 1;
+                            
+                            BX24.callMethod('user.get', {}, function(result){
+                                
+                                let result_data = result.data();
+                                
+                                for (let data_json_item of data_json) {
+                                
+                                    let tr_table = document.createElement('tr');
+                                    let td_table_1 = document.createElement('td');
+                                    let td_table_2 = document.createElement('td');
+                                    let td_table_3 = document.createElement('td');
+                                    let td_table_4 = document.createElement('td');
+                                    let td_table_5 = document.createElement('td');
+                                    let td_table_6 = document.createElement('td');
+                                    
+                                    last_element = data_json[data_json.length - 1];
+                                    
+                                    if (data_json_item['is_group'] == null) {
+                                    
+                                        var associated_user_selector = document.createElement('select'); associated_user_selector.size = 1;
+                                        for (let result_data_item of result_data) {
+                                       
+                                            let option = document.createElement('option');
+                                            option.value = result_data_item['ID'];
+                                            option.text = result_data_item['NAME'] + ' ' + result_data_item['LAST_NAME'];
+
+                                            if (data_json_item['associated_user'] == result_data_item['ID']){
+     
+                                                option.selected = true;
+                                                
+                                            }
+                                            
+                                            associated_user_selector.add(option);
+                                         
+                                        }
+                                        
+                                    } else {
+                                        
+                                        var associated_user_selector = document.createElement('input');
+                                        if (data_json_item['associated_user'] != null) {
+                                            
+                                            associated_user_selector.placeholder = data_json_item['associated_user'];
+                                            
+                                        }
+                                        
+                                    }
+                                    
+                                    
+                                    replace_id = associated_user_id + number;
+                                    associated_user_selector.id = replace_id;
+                                    replace_id = td_id + number;
+                                    td_table_1.id = td_id + number;
+                                    number++;
+
+                                    td_table_1.className = 'td_class'; td_table_1.innerText = data_json_item['id'];
+                                    td_table_2.className = 'td_class'; td_table_2.innerText = data_json_item['chat_id'];
+                                    td_table_3.className = 'td_class'; td_table_3.innerText = data_json_item['user_id'];
+                                    td_table_4.className = 'td_class'; td_table_4.innerText = data_json_item['first_name'];
+                                    td_table_5.className = 'td_class'; td_table_5.innerText = data_json_item['username'];
+                                    td_table_6.className = 'td_class'; td_table_6.appendChild(associated_user_selector);
+                                    
+                                    tr_table.appendChild(td_table_1);
+                                    tr_table.appendChild(td_table_2);
+                                    tr_table.appendChild(td_table_3);
+                                    tr_table.appendChild(td_table_4);
+                                    tr_table.appendChild(td_table_5);
+                                    tr_table.appendChild(td_table_6);
+                                    
+                                    db_table_tbody.appendChild(tr_table);
+                                    console.log(document.getElementById(replace_id));
+                                }
+                            });
+                        });
+                        
+                        replace_send_button.addEventListener('click', function() {
+                    
+                            for (let i = 1; i <= last_element['id']; i++) {
+                            
+                                replace_data = {id : document.getElementById('td_id' + i).innerText, associated_user : document.getElementById('associated_user_id' + i).value};
+                                $.post('replace', replace_data).done(function(data) {
+                                    console.log(data);
+                                });
+                                
+                            }
+                            $.get("database", function(data) {   
+                        
+                                let data_json = JSON.parse(data);
+                                
+                                last_element = data_json[data_json.length - 1];
+                                
+                                for (let data_json_item of data_json) {
+                                    
+                                    replace_id = associated_user_id + data_json_item['id'];
+                                    let input_name = document.getElementById(replace_id); input_name.placeholder = data_json_item['associated_user']; input_name.value = '';
+                                    
+                                }
+                            });
+                        });
+                    });
+	 
+                </script>
+ 
+            </div>
+
+        </body>
+    
+    </html>
